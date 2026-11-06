@@ -1,0 +1,27 @@
+name: tests
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        python: ["3.9", "3.13"]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: tests (built-in validator)
+        run: python -m unittest discover -s tests -v
+      - name: tests (jsonschema validator)
+        run: |
+          python -m pip install jsonschema
+          python -m unittest discover -s tests
+      - name: example packs match engines/
+        run: python scripts/build_examples.py --check
