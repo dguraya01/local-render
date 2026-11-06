@@ -17,6 +17,13 @@ import time
 VERSION = "1.0.0"
 PREFIX = "[local-render]"
 
+# Windows consoles often use a legacy code page; never crash on a non-ASCII character.
+for _s in (sys.stdout, sys.stderr):
+    try:
+        _s.reconfigure(errors="replace")
+    except (AttributeError, ValueError):
+        pass
+
 
 def log(msg=""):
     print("%s %s" % (PREFIX, msg) if msg else "", flush=True)

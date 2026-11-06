@@ -59,7 +59,8 @@ class BuildRoundTrip(unittest.TestCase):
             m = _paths.load_json(os.path.join(pack, "render.json"))
             self.assertEqual(m["render"]["command"], "sh run.sh")
             self.assertIn("python", [x["tool"] for x in m["requires"]])
-            self.assertTrue(os.stat(os.path.join(pack, "run.sh")).st_mode & stat.S_IXUSR)
+            if os.name != "nt":  # Windows has no exec bit; run.sh is invoked as `sh run.sh` anyway
+                self.assertTrue(os.stat(os.path.join(pack, "run.sh")).st_mode & stat.S_IXUSR)
 
     def test_guide_for_every_engine(self):
         for engine in ("html-canvas", "remotion", "blender", "manim", "ffmpeg"):
