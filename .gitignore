@@ -1,0 +1,20 @@
+# build output
+dist/
+
+# render outputs and intermediates
+*.mp4
+*.mov
+.lr-work/
+render-report.json
+preview.png
+
+# dependencies installed at render time
+node_modules/
+package-lock.json
+.venv/
+
+# python / os
+__pycache__/
+*.pyc
+.DS_Store
+Thumbs.db

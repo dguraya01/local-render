@@ -1,0 +1,13 @@
+{
+  "name": "local-render",
+  "version": "1.0.0",
+  "description": "Claude writes the animation, your computer renders it. Render packs for HTML canvas, Remotion, Blender, Manim and ffmpeg videos, rendered locally with VideoToolbox/NVENC instead of in a slow cloud sandbox.",
+  "author": {
+    "name": "dguraya01",
+    "url": "https://github.com/dguraya01"
+  },
+  "homepage": "https://github.com/dguraya01/local-render",
+  "repository": "https://github.com/dguraya01/local-render",
+  "license": "MIT",
+  "keywords": ["video", "motion-graphics", "render", "remotion", "blender", "manim", "ffmpeg", "animation"]
+}

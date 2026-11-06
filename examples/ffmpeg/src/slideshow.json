@@ -1,0 +1,9 @@
+{
+  "slides": [
+    { "image": "assets/slide1.png", "duration": 3.4 },
+    { "image": "assets/slide2.png", "duration": 3.4 },
+    { "image": "assets/slide3.png", "duration": 3.4 }
+  ],
+  "transition": { "type": "smoothleft", "duration": 0.8 },
+  "ken_burns": { "zoom": 1.06 }
+}

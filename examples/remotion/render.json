@@ -1,0 +1,57 @@
+{
+  "schema_version": "1.0",
+  "title": "Same video, two machines",
+  "description": "A 5-second Remotion motion graphic: two stat cards race a render on a cloud sandbox against a laptop, ending on a springy punchline.",
+  "engine": "remotion",
+  "entry": "src/index.ts",
+  "output": "same-video-two-machines.mp4",
+  "resolution": {
+    "width": 1920,
+    "height": 1080
+  },
+  "fps": 30,
+  "duration": 5,
+  "codec": "h264",
+  "requires": [
+    {
+      "tool": "python",
+      "min_version": "3.8",
+      "why": "runs the render script (run.sh / run.ps1)"
+    },
+    {
+      "tool": "node",
+      "min_version": "18",
+      "why": "runs the Remotion CLI"
+    },
+    {
+      "tool": "npm",
+      "min_version": "8",
+      "why": "installs Remotion into src/node_modules"
+    }
+  ],
+  "dependencies": {
+    "npm_dir": "src",
+    "npm": {
+      "@remotion/cli": "4.0.541",
+      "react": "19.2.0",
+      "react-dom": "19.2.0",
+      "remotion": "4.0.541"
+    }
+  },
+  "render": {
+    "command": "sh run.sh",
+    "windows_command": "powershell -ExecutionPolicy Bypass -File run.ps1",
+    "engine_command": "cd src && npx remotion render index.ts Main ../same-video-two-machines.mp4 --codec=h264 --props='{\"lr\":{...}}' --hardware-acceleration=if-possible"
+  },
+  "engine_options": {
+    "composition": "Main",
+    "props": {
+      "cloudMinutes": 45,
+      "localSeconds": 60
+    }
+  },
+  "generator": {
+    "name": "local-render",
+    "version": "1.0.0"
+  }
+}

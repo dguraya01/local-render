@@ -1,0 +1,50 @@
+{
+  "schema_version": "1.0",
+  "title": "Orbit",
+  "description": "A 4-second seamless 3D loop: a chrome sphere inside three spinning neon rings, built from a bpy script and rendered with Eevee on the GPU.",
+  "engine": "blender",
+  "entry": "src/scene.py",
+  "output": "orbit.mp4",
+  "resolution": {
+    "width": 1920,
+    "height": 1080
+  },
+  "fps": 24,
+  "duration": 4,
+  "codec": "h264",
+  "requires": [
+    {
+      "tool": "python",
+      "min_version": "3.8",
+      "why": "runs the render script (run.sh / run.ps1)"
+    },
+    {
+      "tool": "blender",
+      "min_version": "4.2",
+      "why": "builds and renders the 3D scene"
+    },
+    {
+      "tool": "ffmpeg",
+      "min_version": "4.4",
+      "why": "encodes the frames with the fastest encoder"
+    },
+    {
+      "tool": "ffprobe",
+      "min_version": "4.4",
+      "why": "reads the finished video for the report"
+    }
+  ],
+  "render": {
+    "command": "sh run.sh",
+    "windows_command": "powershell -ExecutionPolicy Bypass -File run.ps1",
+    "engine_command": "blender -b --factory-startup -P runtime/blender_driver.py -- --scene src/scene.py --width 1920 --height 1080 --fps 24 --frames 96 --engine eevee && ffmpeg -i .lr-work/frames/frame_%06d.png <fastest encoder> orbit.mp4"
+  },
+  "engine_options": {
+    "render_engine": "eevee",
+    "samples": 32
+  },
+  "generator": {
+    "name": "local-render",
+    "version": "1.0.0"
+  }
+}

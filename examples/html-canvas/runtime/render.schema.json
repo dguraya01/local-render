@@ -1,0 +1,168 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/dguraya01/local-render/schema/render.schema.json",
+  "title": "local-render render pack manifest (render.json)",
+  "description": "Describes a render pack: a self-contained project that renders one video on the user's own machine.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "title",
+    "engine",
+    "entry",
+    "output",
+    "resolution",
+    "fps",
+    "duration",
+    "requires",
+    "render"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "description": "Manifest format version. Packs written for this schema use \"1.0\".",
+      "type": "string",
+      "enum": ["1.0"]
+    },
+    "title": {
+      "description": "Human-readable name of the video.",
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200
+    },
+    "description": {
+      "description": "One or two sentences about what the video shows.",
+      "type": "string",
+      "maxLength": 2000
+    },
+    "engine": {
+      "description": "Which engine adapter renders this pack.",
+      "type": "string",
+      "enum": ["html-canvas", "remotion", "blender", "manim", "ffmpeg"]
+    },
+    "entry": {
+      "description": "Main source file, relative to the pack root (for example src/index.html or src/scene.py).",
+      "$ref": "#/$defs/relpath"
+    },
+    "output": {
+      "description": "Output file name written next to render.json (no folders).",
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._ -]{0,120}\\.(mp4|mov)$"
+    },
+    "resolution": {
+      "type": "object",
+      "required": ["width", "height"],
+      "additionalProperties": false,
+      "properties": {
+        "width": { "type": "integer", "minimum": 16, "maximum": 8192 },
+        "height": { "type": "integer", "minimum": 16, "maximum": 8192 }
+      }
+    },
+    "fps": {
+      "description": "Frames per second.",
+      "type": "number",
+      "minimum": 1,
+      "maximum": 240
+    },
+    "duration": {
+      "description": "Length of the video in seconds.",
+      "type": "number",
+      "exclusiveMinimum": 0,
+      "maximum": 7200
+    },
+    "codec": {
+      "description": "Video codec family. The renderer picks the fastest encoder for it (VideoToolbox, NVENC or software).",
+      "type": "string",
+      "enum": ["h264", "hevc"],
+      "default": "h264"
+    },
+    "audio": {
+      "description": "Optional audio file to mux into the video, relative to the pack root.",
+      "$ref": "#/$defs/relpath"
+    },
+    "requires": {
+      "description": "External tools the render needs, with minimum versions.",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["tool"],
+        "additionalProperties": false,
+        "properties": {
+          "tool": {
+            "type": "string",
+            "enum": ["ffmpeg", "ffprobe", "node", "npm", "python", "blender", "manim", "chrome"]
+          },
+          "min_version": {
+            "type": "string",
+            "pattern": "^[0-9]+(\\.[0-9]+){0,2}$"
+          },
+          "why": { "type": "string", "maxLength": 300 }
+        }
+      }
+    },
+    "dependencies": {
+      "description": "Package dependencies installed into the pack folder at render time (never globally).",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "npm": {
+          "description": "npm packages, name -> exact version. Installed from the package.json named in npm_dir.",
+          "type": "object",
+          "additionalProperties": { "type": "string", "pattern": "^[0-9A-Za-z.^~<>=|* -]+$" }
+        },
+        "npm_dir": {
+          "description": "Folder containing package.json, relative to the pack root.",
+          "$ref": "#/$defs/relpath"
+        },
+        "pip": {
+          "description": "Python packages, name -> version spec. Informational: render-run reports them and asks before installing.",
+          "type": "object",
+          "additionalProperties": { "type": "string" }
+        }
+      }
+    },
+    "render": {
+      "type": "object",
+      "required": ["command", "windows_command", "engine_command"],
+      "additionalProperties": false,
+      "properties": {
+        "command": {
+          "description": "The one command a person runs on macOS/Linux from the pack folder.",
+          "type": "string",
+          "const": "sh run.sh"
+        },
+        "windows_command": {
+          "description": "The one command a person runs on Windows from the pack folder.",
+          "type": "string",
+          "const": "powershell -ExecutionPolicy Bypass -File run.ps1"
+        },
+        "engine_command": {
+          "description": "The underlying engine invocation run.sh performs, for transparency.",
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "engine_options": {
+      "description": "Engine-specific settings. See engines/<engine>/AUTHORING.md.",
+      "type": "object"
+    },
+    "generator": {
+      "description": "What built this pack.",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "version": { "type": "string" }
+      }
+    }
+  },
+  "$defs": {
+    "relpath": {
+      "description": "A relative path inside the pack using forward slashes. No absolute paths, drive letters or '..' segments.",
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 300,
+      "pattern": "^(?!/)(?![A-Za-z]:)(?!.*\\\\)(?!(.*/)?\\.\\.(/|$))[^\\x00]+$"
+    }
+  }
+}

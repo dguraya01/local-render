@@ -1,0 +1,54 @@
+{
+  "schema_version": "1.0",
+  "title": "Why render locally?",
+  "description": "An 8-second Manim explainer: render time falls like 1/cores, and a hardware video encoder takes it the rest of the way to about a minute.",
+  "engine": "manim",
+  "entry": "src/scene.py",
+  "output": "why-render-locally.mp4",
+  "resolution": {
+    "width": 1920,
+    "height": 1080
+  },
+  "fps": 30,
+  "duration": 8,
+  "codec": "h264",
+  "requires": [
+    {
+      "tool": "python",
+      "min_version": "3.8",
+      "why": "runs the render script (run.sh / run.ps1)"
+    },
+    {
+      "tool": "manim",
+      "min_version": "0.18",
+      "why": "draws the math animation (Manim Community)"
+    },
+    {
+      "tool": "ffmpeg",
+      "min_version": "4.4",
+      "why": "encodes the frames with the fastest encoder"
+    },
+    {
+      "tool": "ffprobe",
+      "min_version": "4.4",
+      "why": "reads the finished video for the report"
+    }
+  ],
+  "dependencies": {
+    "pip": {
+      "manim": ">=0.18"
+    }
+  },
+  "render": {
+    "command": "sh run.sh",
+    "windows_command": "powershell -ExecutionPolicy Bypass -File run.ps1",
+    "engine_command": "manim render src/scene.py Main --format mp4 -r 1920,1080 --fps 30 --media_dir .lr-work/media --disable_caching && ffmpeg -i .lr-work/media/videos/.../Main.mp4 <fastest encoder> why-render-locally.mp4"
+  },
+  "engine_options": {
+    "scene": "Main"
+  },
+  "generator": {
+    "name": "local-render",
+    "version": "1.0.0"
+  }
+}

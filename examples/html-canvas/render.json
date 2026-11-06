@@ -1,0 +1,61 @@
+{
+  "schema_version": "1.0",
+  "title": "Write in the cloud. Render at home.",
+  "description": "A 6-second kinetic-type motion graphic drawn on an HTML canvas, comparing a cloud sandbox render with a local one.",
+  "engine": "html-canvas",
+  "entry": "src/index.html",
+  "output": "write-in-the-cloud.mp4",
+  "resolution": {
+    "width": 1920,
+    "height": 1080
+  },
+  "fps": 30,
+  "duration": 6,
+  "codec": "h264",
+  "requires": [
+    {
+      "tool": "python",
+      "min_version": "3.8",
+      "why": "runs the render script (run.sh / run.ps1)"
+    },
+    {
+      "tool": "node",
+      "min_version": "18",
+      "why": "runs the Playwright frame capture"
+    },
+    {
+      "tool": "npm",
+      "min_version": "8",
+      "why": "installs playwright-core into runtime/"
+    },
+    {
+      "tool": "chrome",
+      "why": "headless browser that draws the frames (Chrome, Edge or Chromium)"
+    },
+    {
+      "tool": "ffmpeg",
+      "min_version": "4.4",
+      "why": "encodes the frames to video"
+    },
+    {
+      "tool": "ffprobe",
+      "min_version": "4.4",
+      "why": "reads the finished video for the report"
+    }
+  ],
+  "dependencies": {
+    "npm": {
+      "playwright-core": "1.65.0"
+    },
+    "npm_dir": "runtime"
+  },
+  "render": {
+    "command": "sh run.sh",
+    "windows_command": "powershell -ExecutionPolicy Bypass -File run.ps1",
+    "engine_command": "node runtime/capture.mjs --entry src/index.html --width 1920 --height 1080 --fps 30 --frames 180 && ffmpeg -i .lr-work/frames/frame_%06d.png <fastest encoder> write-in-the-cloud.mp4"
+  },
+  "generator": {
+    "name": "local-render",
+    "version": "1.0.0"
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "schema_version": "1.0",
+  "title": "Write. Pack. Render.",
+  "description": "An 8.6-second slideshow built entirely with ffmpeg: three stills with slow Ken Burns zooms, smooth slide transitions and a music bed.",
+  "engine": "ffmpeg",
+  "entry": "src/slideshow.json",
+  "output": "write-pack-render.mp4",
+  "resolution": {
+    "width": 1920,
+    "height": 1080
+  },
+  "fps": 30,
+  "duration": 8.6,
+  "codec": "h264",
+  "audio": "assets/music.m4a",
+  "requires": [
+    {
+      "tool": "python",
+      "min_version": "3.8",
+      "why": "runs the render script (run.sh / run.ps1)"
+    },
+    {
+      "tool": "ffmpeg",
+      "min_version": "4.4",
+      "why": "builds and encodes the whole video"
+    },
+    {
+      "tool": "ffprobe",
+      "min_version": "4.4",
+      "why": "reads the finished video for the report"
+    }
+  ],
+  "render": {
+    "command": "sh run.sh",
+    "windows_command": "powershell -ExecutionPolicy Bypass -File run.ps1",
+    "engine_command": "ffmpeg -loop 1 -i <each slide> ... -filter_complex '<scale, zoompan, xfade chain>' <fastest encoder> write-pack-render.mp4   (graph built from src/slideshow.json)"
+  },
+  "generator": {
+    "name": "local-render",
+    "version": "1.0.0"
+  }
+}

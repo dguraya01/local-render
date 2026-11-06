@@ -1,0 +1,20 @@
+{
+  "name": "local-render",
+  "owner": {
+    "name": "dguraya01",
+    "url": "https://github.com/dguraya01"
+  },
+  "metadata": {
+    "description": "Skills that hand heavy video rendering off to your own computer."
+  },
+  "plugins": [
+    {
+      "name": "local-render",
+      "source": "./",
+      "description": "render-pack + render-run skills: Claude writes motion graphics as render packs; your machine renders them in about a minute.",
+      "version": "1.0.0",
+      "category": "media",
+      "keywords": ["video", "motion-graphics", "render"]
+    }
+  ]
+}

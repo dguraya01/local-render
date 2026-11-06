@@ -1,0 +1,9 @@
+{
+  "name": "local-render-html-capture",
+  "private": true,
+  "type": "module",
+  "description": "Frame capture runtime for local-render html-canvas packs",
+  "dependencies": {
+    "playwright-core": "1.65.0"
+  }
+}
